@@ -8,7 +8,7 @@ function Navbar() {
       padding:"20px",
       background:"#e8f5e9"
     }}>
-      <h2>EcoStay AI</h2>
+     <h2>🌿 EcoStay AI</h2>
 
       <Link to="/">Home</Link>
       <Link to="/about">About</Link>
