@@ -7,7 +7,7 @@ function Footer() {
         marginTop:"20px"
       }}
     >
-      © 2026 EcoStay AI
+     © 2026 EcoStay AI | Sustainable Tourism
     </footer>
   );
 }
