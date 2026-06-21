@@ -1,4 +1,12 @@
 /**
+ * Button Component
+ * @param {string} text
+ * @param {function} onClick
+ */
+
+
+
+/**
  * Props:
  * text - button text
  */

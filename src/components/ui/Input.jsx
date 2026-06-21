@@ -1,4 +1,9 @@
 /**
+ * Input Component
+ * @param {string} placeholder
+ */
+
+/**
  * Props:
  * placeholder
  */

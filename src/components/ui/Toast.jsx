@@ -1,5 +1,10 @@
 /**
  * Toast Component
+ * Displays notification message
+ */
+
+/**
+ * Toast Component
  */
 
 function Toast() {

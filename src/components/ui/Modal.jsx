@@ -1,5 +1,9 @@
 /**
  * Modal Component
+ * Reusable popup modal
+ */
+/**
+ * Modal Component
  */
 
 function Modal() {

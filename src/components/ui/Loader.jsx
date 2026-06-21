@@ -1,5 +1,9 @@
 /**
  * Loader Component
+ * Displays loading state
+ */
+/**
+ * Loader Component
  */
 
 function Loader() {
