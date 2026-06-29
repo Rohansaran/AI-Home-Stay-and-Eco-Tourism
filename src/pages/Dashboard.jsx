@@ -1,56 +1,35 @@
-import { useState } from "react";
-
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-
-import {
-  Button,
-  Input,
-  Modal,
-  Loader,
-  Toast,
-  ThemeToggle,
-} from "../components/ui";
+import { useEffect, useState } from "react";
 
 function Dashboard() {
-  const [dark, setDark] = useState(false);
+  const [homestays, setHomestays] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:5000/api/homestays")
+      .then((res) => res.json())
+      .then((data) => setHomestays(data))
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
-    <>
-      <Navbar />
+    <div style={{ padding: "20px" }}>
+      <h1>EcoStay Dashboard</h1>
 
-      <div
-        style={{
-          padding: "20px",
-          background: dark ? "#222" : "#fff",
-          color: dark ? "#fff" : "#000",
-          minHeight: "100vh",
-        }}
-      >
-        <h1>Dashboard</h1>
-
-        <ThemeToggle
-          dark={dark}
-          setDark={setDark}
-        />
-
-        <br />
-
-        <Input placeholder="Search Homestay" />
-
-        <br />
-
-        <Button text="Book Now" />
-
-        <Modal />
-
-        <Loader />
-
-        <Toast />
-      </div>
-
-      <Footer />
-    </>
+      {homestays.map((stay) => (
+        <div
+          key={stay.id}
+          style={{
+            border: "1px solid #ccc",
+            padding: "15px",
+            marginBottom: "10px",
+            borderRadius: "8px",
+          }}
+        >
+          <h3>{stay.name}</h3>
+          <p>📍 {stay.location}</p>
+          <p>💰 ₹{stay.price}</p>
+        </div>
+      ))}
+    </div>
   );
 }
 
