@@ -73,7 +73,7 @@ exports.remove = (req, res) => {
     message: "Deleted Successfully",
   });
 };
-
+//
 // SEARCH
 exports.search = (req, res) => {
   const location = req.query.location;
