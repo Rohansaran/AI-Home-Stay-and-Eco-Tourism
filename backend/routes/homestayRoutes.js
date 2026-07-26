@@ -3,19 +3,21 @@ const express = require("express");
 const router = express.Router();
 
 const {
-  getAll,
-  getById,
-  create,
-  update,
-  remove,
-  search,
+  getHomestays,
+  getHomestayById,
+  createHomestay,
+  updateHomestay,
+  deleteHomestay,
 } = require("../controllers/homestayController");
 
-router.get("/", getAll);
-router.get("/search", search);
-router.get("/:id", getById);
-router.post("/", create);
-router.put("/:id", update);
-router.delete("/:id", remove);
+router.get("/", getHomestays);
+
+router.get("/:id", getHomestayById);
+
+router.post("/", createHomestay);
+
+router.put("/:id", updateHomestay);
+
+router.delete("/:id", deleteHomestay);
 
 module.exports = router;

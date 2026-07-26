@@ -1,86 +1,150 @@
-let homestays = [
-  {
-    id: 1,
-    name: "Green Valley Homestay",
-    location: "Dehradun",
-    price: 2500,
-  },
-  {
-    id: 2,
-    name: "Mountain View Cottage",
-    location: "Mussoorie",
-    price: 3500,
-  },
-];
+const Homestay = require("../models/Homestay");
 
-// GET ALL
-exports.getAll = (req, res) => {
-  res.json(homestays);
-};
+// =======================
+// GET ALL HOMESTAYS
+// =======================
+const getHomestays = async (req, res) => {
+  try {
+    const { location, category, minPrice, maxPrice } = req.query;
 
-// GET BY ID
-exports.getById = (req, res) => {
-  const stay = homestays.find(
-    (h) => h.id == req.params.id
-  );
+    let filter = {};
 
-  if (!stay)
-    return res.status(404).json({
-      message: "Not Found",
+    // Search by location
+    if (location) {
+      filter.location = {
+        $regex: location,
+        $options: "i",
+      };
+    }
+
+    // Filter by category
+    if (category) {
+      filter.category = category;
+    }
+
+    // Filter by price
+    if (minPrice || maxPrice) {
+      filter.price = {};
+
+      if (minPrice) {
+        filter.price.$gte = Number(minPrice);
+      }
+
+      if (maxPrice) {
+        filter.price.$lte = Number(maxPrice);
+      }
+    }
+
+    const homestays = await Homestay.find(filter);
+
+    res.status(200).json(homestays);
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
     });
-
-  res.json(stay);
+  }
 };
 
-// POST
-exports.create = (req, res) => {
-  const stay = {
-    id: homestays.length + 1,
-    ...req.body,
-  };
+// =======================
+// GET SINGLE HOMESTAY
+// =======================
+const getHomestayById = async (req, res) => {
+  try {
+    const homestay = await Homestay.findById(req.params.id);
 
-  homestays.push(stay);
+    if (!homestay) {
+      return res.status(404).json({
+        success: false,
+        message: "Homestay not found",
+      });
+    }
 
-  res.status(201).json(stay);
-};
-
-// PUT
-exports.update = (req, res) => {
-  const index = homestays.findIndex(
-    (h) => h.id == req.params.id
-  );
-
-  if (index === -1)
-    return res.status(404).json({
-      message: "Not Found",
+    res.status(200).json(homestay);
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
     });
-
-  homestays[index] = {
-    ...homestays[index],
-    ...req.body,
-  };
-
-  res.json(homestays[index]);
+  }
 };
 
-// DELETE
-exports.remove = (req, res) => {
-  homestays = homestays.filter(
-    (h) => h.id != req.params.id
-  );
+// =======================
+// CREATE HOMESTAY
+// =======================
+const createHomestay = async (req, res) => {
+  try {
+    const homestay = await Homestay.create(req.body);
 
-  res.json({
-    message: "Deleted Successfully",
-  });
+    res.status(201).json(homestay);
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
-//
-// SEARCH
-exports.search = (req, res) => {
-  const location = req.query.location;
 
-  const result = homestays.filter((h) =>
-    h.location.toLowerCase().includes(location.toLowerCase())
-  );
+// =======================
+// UPDATE HOMESTAY
+// =======================
+const updateHomestay = async (req, res) => {
+  try {
+    const homestay = await Homestay.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {
+        returnDocument: "after",
+        runValidators: true,
+      }
+    );
 
-  res.json(result);
+    if (!homestay) {
+      return res.status(404).json({
+        success: false,
+        message: "Homestay not found",
+      });
+    }
+
+    res.status(200).json(homestay);
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// =======================
+// DELETE HOMESTAY
+// =======================
+const deleteHomestay = async (req, res) => {
+  try {
+    const homestay = await Homestay.findByIdAndDelete(req.params.id);
+
+    if (!homestay) {
+      return res.status(404).json({
+        success: false,
+        message: "Homestay not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Homestay deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+module.exports = {
+  getHomestays,
+  getHomestayById,
+  createHomestay,
+  updateHomestay,
+  deleteHomestay,
 };
